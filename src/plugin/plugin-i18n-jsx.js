@@ -1,6 +1,6 @@
 const t = require('@babel/types');
 
-function reactPlugin (allTranslateWord, randomStr) {
+function reactPlugin (allTranslateWord, randomStr, prefix) {
   function baseType (v) {
     return Object.prototype.toString.call(v)
   }
@@ -17,7 +17,7 @@ function reactPlugin (allTranslateWord, randomStr) {
     } else {
       allTranslateWord[val] = key
     }
-    
+
     // 用于防止中文转码为 unicode
     const v = Object.assign(t.StringLiteral(value), {
       extra: {
@@ -26,18 +26,23 @@ function reactPlugin (allTranslateWord, randomStr) {
       }
     })
     return t.CallExpression(
-      t.MemberExpression(
-        t.CallExpression(
-          t.MemberExpression(
-            t.Identifier("intl"),
-            t.Identifier("get")
-          ),
-          setObjectExpression(variableObj) ? [t.StringLiteral(key), setObjectExpression(variableObj)] : [t.StringLiteral(key)]
-        ),
-        t.Identifier("d"),
-      ),
-      [v]
-    );
+          t.Identifier("window._intl.formatMessage"),
+          [t.Identifier(prefix ? prefix + "." + key : key)]
+          // setObjectExpression(variableObj) ? [t.StringLiteral(key), setObjectExpression(variableObj)] : [t.StringLiteral(key)]
+        )
+    // t.CallExpression(
+    //   t.MemberExpression(
+    //     t.CallExpression(
+    //       t.MemberExpression(
+    //         t.Identifier("intl"),
+    //         t.Identifier("get")
+    //       ),
+    //       setObjectExpression(variableObj) ? [t.StringLiteral(key), setObjectExpression(variableObj)] : [t.StringLiteral(key)]
+    //     ),
+    //     t.Identifier("d"),
+    //   ),
+    //   [v]
+    // );
   }
 
   function setObjectExpression(obj) {
