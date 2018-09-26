@@ -22,7 +22,7 @@ function translate ({filePath, option, allTranslateWords, randomStr, prefix}) {
       plugin
     ]
   }
-  const output = generator.default(babel.transformFileSync(filePath, option || transformOptions).ast);
+  const output = generator.default(babel.transformFileSync(filePath, transformOptions).ast);
   return output;
 }
 

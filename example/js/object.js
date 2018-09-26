@@ -1,1 +1,0 @@
-const obj = { test: '测试' };

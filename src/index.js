@@ -7,7 +7,7 @@ const chalk = require('./chalk')
 
 const randomStr = () => Math.random().toString(36).substr(2);
 
-const { entry, output, exclude, randomFuc, outputFilename, prefix } = parseArgv(process.argv);
+const { entry, output, exclude, randomFuc, outputFilename, prefix, toolPath } = parseArgv(process.argv);
 const tempFileName = outputFilename ?
     outputFilename.indexOf('.') > 0 ?
       outputFilename
@@ -52,14 +52,14 @@ translateFiles.forEach(filePath => {
   chalk.success(`${filePath} is success`)
 })
 let outputString = `
-import { defineIntlMessages } from "common/tools";
+import { defineIntlMessages } from "${toolPath}";
 
 export const mapData = {
   prefix: '${prefix}',
   data: {\n`;
 
 Object.keys(allTranslateWords).forEach(word => {
-  outputString += `    ${allTranslateWords[word].split('.').pop()}: '${word}',\n`
+  outputString += `    ${allTranslateWords[word].split('.').pop()}: \`${word}\`,\n`
 })
 
 outputString += '  }\n}\n'
